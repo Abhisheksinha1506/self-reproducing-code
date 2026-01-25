@@ -1,0 +1,1 @@
+s='s=%s;m=%s;print(s%%(repr(s),repr(m)))';m='2026-01-25-7f8820';print(s%(repr(s),repr(m)))
