@@ -66,5 +66,15 @@ def evolve():
     with open(log_path, 'a') as f:
         f.write(f"| {date_str} | {status} | {mutation_desc} |\n")
 
+    # Generate human summary
+    if status == "SUCCESS":
+        summary = f"A new version of the quine has been born today! The code successfully mutated and passed the 'mirror test'—it can still print itself perfectly. "
+        summary += f"The unique tag for this generation is {new_tag}."
+    else:
+        summary = f"Mutation attempt failed today. The proposed code could not reproduce itself accurately. The lineage remains unchanged to ensure survival."
+
+    with open(os.path.join(base_dir, 'summary.txt'), 'w') as f:
+        f.write(summary)
+
 if __name__ == "__main__":
     evolve()

@@ -24,6 +24,11 @@ jobs:
       - name: Run evolution script
         run: python3 evolve.py
 
+      - name: Read Summary
+        id: summary
+        run: |
+          echo "BODY=$(cat summary.txt)" >> $GITHUB_OUTPUT
+
       - name: Create Pull Request
         if: success()
         uses: peter-evans/create-pull-request@v6
@@ -31,7 +36,7 @@ jobs:
           commit-message: "Evolve Quine Lineage - Gen ${{ github.run_number }}"
           branch: "evolution/lineage-update"
           title: "Quine Mutation Proposal: Gen ${{ github.run_number }}"
-          body: "A new valid mutation of the quine program has been successfully verified."
+          body: ${{ steps.summary.outputs.BODY }}
           delete-branch: true
 
       - name: Report Failure
