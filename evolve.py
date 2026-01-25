@@ -76,5 +76,23 @@ def evolve():
     with open(os.path.join(base_dir, 'summary.txt'), 'w') as f:
         f.write(summary)
 
+    # Update README with latest status
+    readme_path = os.path.join(base_dir, 'README.md')
+    if os.path.exists(readme_path):
+        with open(readme_path, 'r') as f:
+            content = f.read()
+        
+        start_marker = "<!-- LATEST_STATUS_START -->"
+        end_marker = "<!-- LATEST_STATUS_END -->"
+        
+        if start_marker in content and end_marker in content:
+            parts = content.split(start_marker)
+            prefix = parts[0] + start_marker
+            suffix = end_marker + parts[1].split(end_marker)[1]
+            new_content = f"{prefix}\n> {summary}\n{suffix}"
+            
+            with open(readme_path, 'w') as f:
+                f.write(new_content)
+
 if __name__ == "__main__":
     evolve()
