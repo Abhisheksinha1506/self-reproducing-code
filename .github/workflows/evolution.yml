@@ -1,0 +1,33 @@
+name: Daily Evolution
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Daily at 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Evolve Organism
+        run: |
+          if [ -f "evolve.py" ]; then
+            python3 evolve.py
+          else
+            echo "No evolution script found"
+            exit 1
+          fi
+          
+      - name: Commit Growth
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Evolution: Daily growth cycle"
