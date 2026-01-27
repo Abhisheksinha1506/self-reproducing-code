@@ -1,3 +1,5 @@
+concurrency: quine-lineage-evolution
+
 name: Daily Evolution
 
 on:
@@ -28,6 +30,14 @@ jobs:
           fi
           
       - name: Commit Growth
-        uses: stefanzweifel/git-auto-commit-action@v5
+
+      - name: Fetch and Rebase
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git pull --rebase origin main
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Evolution: Daily growth cycle"

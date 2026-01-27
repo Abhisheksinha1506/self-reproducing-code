@@ -1,3 +1,5 @@
+concurrency: quine-lineage-evolution
+
 name: Evolve Quine Lineage
 
 on:
@@ -33,7 +35,15 @@ jobs:
           echo "BODY=$(cat summary.txt)" >> $GITHUB_OUTPUT
 
       - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+
+      - name: Fetch and Rebase
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git pull --rebase origin main
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Evolve Quine Lineage - Gen ${{ github.run_number }} [skip ci]"
           branch: main
