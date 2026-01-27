@@ -99,19 +99,20 @@ def evolve():
 def update_readme(summary):
     readme_path = Path("README.md")
     if not readme_path.exists(): return
-    with open(readme_path, 'r') as f:
-        content = f.read()
-    
-    start_marker = "<!-- LATEST_STATUS_START -->"
-    end_marker = "<!-- LATEST_STATUS_END -->"
-    
-    if start_marker in content and end_marker in content:
-        parts = content.split(start_marker)
-        prefix = parts[0] + start_marker
-        suffix = end_marker + parts[1].split(end_marker)[1]
-        new_content = f"{prefix}\n*{summary}*\n{suffix}"
-        with open(readme_path, 'w') as f:
-            f.write(new_content)
-
+    try:
+        content = readme_path.read_text()
+        start = "<!-- LATEST_STATUS_START -->"
+        end = "<!-- LATEST_STATUS_END -->"
+        if start not in content or end not in content: return
+        parts = content.split(start)
+        suffix_parts = parts[1].split(end)
+        prefix = parts[0] + start
+        suffix = end + suffix_parts[1]
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+        new_inner = f"
+*{summary} ({timestamp})*
+"
+        readme_path.write_text(prefix + new_inner + suffix)
+    except Exception as e: print(f"⚠️ README Update Failed: {e}")
 if __name__ == "__main__":
     evolve()
