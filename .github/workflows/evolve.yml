@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install Dependencies
+        run: pip install numpy networkx matplotlib
+
       - name: Run evolution script
         run: python3 evolve.py
 
